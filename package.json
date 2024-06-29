@@ -1,23 +1,91 @@
 {
-  "name": "helloworld",
-  "displayName": "HelloWorld",
+  "name": "huggingface-repo",
+  "displayName": "HuggingFaceRepo",
   "description": "",
   "version": "0.0.1",
+  "publisher": "AgainstEntropy",
+  "author": {
+    "name": "Ethan Wang",
+    "email": "yihao.w@nyu.edu"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DonJayamanne/gitHistoryVSCode/blob/main/README.md",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "helloworld.helloWorld",
-        "title": "Hello World"
+        "command": "huggingface.openRepo",
+        "title": "Open HuggingFace repo",
+        "icon": "resources/icons/huggingface_logo.svg"
       }
-    ]
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "huggingface.openRepo",
+          "group": "navigation",
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'navigation'"
+        },
+        {
+          "command": "huggingface.openRepo",
+          "group": "hugging_face",
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'More Actions'"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "huggingface.openRepo",
+          "group": "navigation",
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'navigation'"
+        },
+        {
+          "command": "huggingface.openRepo",
+          "group": "hugging_face",
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'More Actions'"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "huggingface.openRepo",
+          "group": "git",
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "HuggingFace Repo",
+      "properties": {
+        "huggingface.showEditorTitleLocation": {
+          "type": "string",
+          "enum": [
+            "navigation",
+            "More Actions"
+          ],
+          "default": "navigation",
+          "scope": "window",
+          "description": "Where to display the button in the editor title menu bar"
+        },
+        "huggingface.showSourceControlViewLocation": {
+          "type": "string",
+          "enum": [
+            "navigation",
+            "More Actions"
+          ],
+          "default": "More Actions",
+          "description": "Where to display the button in the editor title menu bar"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
