@@ -1,4 +1,4 @@
-import { extensions, Uri } from "vscode";
+import { extensions, Uri, Disposable } from "vscode";
 import { API, GitExtension, Repository } from "./typings/git";
 
 export async function getHuggingFaceRepository(): Promise<Uri | undefined> {
@@ -12,7 +12,7 @@ export async function getHuggingFaceRepository(): Promise<Uri | undefined> {
 	return Uri.parse(`https://huggingface.co/${owner}/${repo}`);
 }
 
-function getHuggingFaceRepositoryIdFromUrl(url: string): { owner: string; repo: string } | undefined {
+export function getHuggingFaceRepositoryIdFromUrl(url: string): { owner: string; repo: string } | undefined {
 	const match = /^https:\/\/huggingface\.co\/([^/]+)\/([^/]+)$/i.exec(url)
 		|| /^git@hf\.co:([^/]+)\/([^/]+)$/i.exec(url);
 	return match ? { owner: match[1], repo: match[2] } : undefined;
@@ -32,36 +32,38 @@ export function toHttpsHuggingFaceRemote(url: string) {
 	return `https://huggingface.co/${owner}/${repo}`;
 }
 
-export async function getGitAPI(): Promise<API> {
-	const gitExtension = extensions.getExtension<GitExtension>('vscode.git');
+export function getGitAPI(): API {
+	const gitExtension = extensions.getExtension<GitExtension>('vscode.git')?.exports;
 	if (!gitExtension) {
 		throw new Error('Git extension not found');
 	} else {
 		console.log('getGitAPI: Git extension found');
 	}
-	const extension = await gitExtension.activate();
-	return extension.getAPI(1);
+	return gitExtension.getAPI(1);
+	// const extension = await gitExtension.activate();
+	// return extension.getAPI(1);
 }
 
 export async function getRemoteUrl(): Promise<string> {
 	const gitAPI = await getGitAPI();
 	console.log('getRemoteUrl: Git API found, state: ' + gitAPI.state);
-	// wait for the gitAPI to initialize
-	while (gitAPI.state === "uninitialized") {
-		await new Promise(resolve => setTimeout(resolve, 500));
-	}
 
-	// wait for the repositories to load
-	while (gitAPI.repositories.length === 0) {
-		await new Promise(resolve => setTimeout(resolve, 500));
-	}
-	console.log('getRemoteUrl: repositories found');
+	// wait for the gitAPI to initialize
+	// while (gitAPI.state === "uninitialized") {
+	// 	await sleep(500);
+	// }
+
+	// // wait for the repositories to load
+	// while (gitAPI.repositories.length === 0) {
+	// 	await sleep(500);
+	// }
+	// console.log('getRemoteUrl: repositories found');
 	const repositories = gitAPI.repositories;
 
 	// wait for the remotes to load
-	while (repositories[0].state.remotes.length === 0) {
-		await new Promise(resolve => setTimeout(resolve, 500));
-	}
+	// while (repositories[0].state.remotes.length === 0) {
+	// 	await sleep(500);
+	// }
 	const remotes = repositories[0].state.remotes;
 	console.log('getRemoteUrl: remotes found');
 
@@ -69,4 +71,23 @@ export async function getRemoteUrl(): Promise<string> {
 	console.log(remoteUrl);
 
 	return remoteUrl;
+}
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export class DisposableStore {
+
+	private disposables = new Set<Disposable>();
+
+	add(disposable: Disposable): void {
+		this.disposables.add(disposable);
+	}
+
+	dispose(): void {
+		for (const disposable of this.disposables) {
+			disposable.dispose();
+		}
+
+		this.disposables.clear();
+	}
 }

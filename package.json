@@ -33,31 +33,31 @@
         {
           "command": "huggingface.openRepo",
           "group": "navigation",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'navigation'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'navigation'"
         },
         {
           "command": "huggingface.openRepo",
           "group": "hugging_face",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'More Actions'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'More Actions'"
         }
       ],
       "editor/title": [
         {
           "command": "huggingface.openRepo",
           "group": "navigation",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'navigation'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'navigation'"
         },
         {
           "command": "huggingface.openRepo",
           "group": "hugging_face",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'More Actions'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'More Actions'"
         }
       ],
       "editor/title/context": [
         {
           "command": "huggingface.openRepo",
           "group": "git",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo"
         }
       ]
     },
