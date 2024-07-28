@@ -1,93 +1,35 @@
-import { extensions, Uri, Disposable } from "vscode";
-import { API, GitExtension, Repository } from "./typings/git";
-
-export async function getHuggingFaceRepository(): Promise<Uri | undefined> {
-	const url = await getRemoteUrl();
-	const result = getHuggingFaceRepositoryIdFromUrl(url);
-	if (!result) {
-		return undefined;
-	}
-
-	const {owner, repo} = result;
-	return Uri.parse(`https://huggingface.co/${owner}/${repo}`);
-}
-
-export function getHuggingFaceRepositoryIdFromUrl(url: string): { owner: string; repo: string } | undefined {
-	const match = /^https:\/\/huggingface\.co\/([^/]+)\/([^/]+)$/i.exec(url)
-		|| /^git@hf\.co:([^/]+)\/([^/]+)$/i.exec(url);
-	return match ? { owner: match[1], repo: match[2] } : undefined;
-}
-
-export function getHuggingFaceRepositoryFromQuery(query: string): { owner: string; repo: string } | undefined {
-	const match = /^([^/]+)\/([^/]+)$/i.exec(query);
-	return match ? { owner: match[1], repo: match[2] } : undefined;
-}
+import { Disposable } from 'vscode';
+import { Repository } from './typings/git';
 
 export function repositoryHasHuggingFaceRemote(repository: Repository) {
-	return !!repository.state.remotes.find(remote => remote.fetchUrl ? getHuggingFaceRepositoryIdFromUrl(remote.fetchUrl) : undefined);
+    return !!repository.state.remotes.find((remote) =>
+        remote.fetchUrl
+            ? getHuggingFaceRepositoryIdFromUrl(remote.fetchUrl)
+            : undefined,
+    );
 }
 
-export function toHttpsHuggingFaceRemote(url: string) {
-	const {owner, repo} = getHuggingFaceRepositoryIdFromUrl(url)!;
-	return `https://huggingface.co/${owner}/${repo}`;
+export function getHuggingFaceRepositoryIdFromUrl(
+    url: string,
+): { owner: string; repo: string } | undefined {
+    const match =
+        /^https:\/\/huggingface\.co\/([^/]+)\/([^/]+)$/i.exec(url) ||
+        /^git@hf\.co:([^/]+)\/([^/]+)$/i.exec(url);
+    return match ? { owner: match[1], repo: match[2] } : undefined;
 }
-
-export function getGitAPI(): API {
-	const gitExtension = extensions.getExtension<GitExtension>('vscode.git')?.exports;
-	if (!gitExtension) {
-		throw new Error('Git extension not found');
-	} else {
-		console.log('getGitAPI: Git extension found');
-	}
-	return gitExtension.getAPI(1);
-	// const extension = await gitExtension.activate();
-	// return extension.getAPI(1);
-}
-
-export async function getRemoteUrl(): Promise<string> {
-	const gitAPI = await getGitAPI();
-	console.log('getRemoteUrl: Git API found, state: ' + gitAPI.state);
-
-	// wait for the gitAPI to initialize
-	// while (gitAPI.state === "uninitialized") {
-	// 	await sleep(500);
-	// }
-
-	// // wait for the repositories to load
-	// while (gitAPI.repositories.length === 0) {
-	// 	await sleep(500);
-	// }
-	// console.log('getRemoteUrl: repositories found');
-	const repositories = gitAPI.repositories;
-
-	// wait for the remotes to load
-	// while (repositories[0].state.remotes.length === 0) {
-	// 	await sleep(500);
-	// }
-	const remotes = repositories[0].state.remotes;
-	console.log('getRemoteUrl: remotes found');
-
-	const remoteUrl = remotes[0].fetchUrl!;
-	console.log(remoteUrl);
-
-	return remoteUrl;
-}
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export class DisposableStore {
+    private disposables = new Set<Disposable>();
 
-	private disposables = new Set<Disposable>();
+    add(disposable: Disposable): void {
+        this.disposables.add(disposable);
+    }
 
-	add(disposable: Disposable): void {
-		this.disposables.add(disposable);
-	}
+    dispose(): void {
+        for (const disposable of this.disposables) {
+            disposable.dispose();
+        }
 
-	dispose(): void {
-		for (const disposable of this.disposables) {
-			disposable.dispose();
-		}
-
-		this.disposables.clear();
-	}
+        this.disposables.clear();
+    }
 }
