@@ -1,9 +1,5 @@
 # Change Log
 
-All notable changes to the "helloworld" extension will be documented in this file.
+## 0.0.1 (07/28/2024)
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+- Initial release of HuggingFace Repo Extension.

@@ -1,7 +1,7 @@
 {
   "name": "huggingface-repo",
   "displayName": "HuggingFaceRepo",
-  "description": "",
+  "description": "Open HuggingFace repo with a single click",
   "version": "0.0.1",
   "publisher": "AgainstEntropy",
   "author": {
@@ -9,11 +9,16 @@
     "email": "yihao.w@nyu.edu"
   },
   "license": "MIT",
-  "homepage": "https://github.com/DonJayamanne/gitHistoryVSCode/blob/main/README.md",
+  "homepage": "https://github.com/AgainstEntropy/huggingface-repo-vscode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AgainstEntropy/huggingface-repo-vscode"
+  },
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
+    "SCM Providers",
     "Other"
   ],
   "activationEvents": [
@@ -33,31 +38,31 @@
         {
           "command": "huggingface.openRepo",
           "group": "navigation",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'navigation'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'navigation'"
         },
         {
           "command": "huggingface.openRepo",
           "group": "hugging_face",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'More Actions'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && config.huggingface.showSourceControlViewLocation == 'More Actions'"
         }
       ],
       "editor/title": [
         {
           "command": "huggingface.openRepo",
           "group": "navigation",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'navigation'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'navigation'"
         },
         {
           "command": "huggingface.openRepo",
           "group": "hugging_face",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'More Actions'"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo && resourceScheme == file && config.huggingface.showEditorTitleLocation == 'More Actions'"
         }
       ],
       "editor/title/context": [
         {
           "command": "huggingface.openRepo",
           "group": "git",
-          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && isHuggingFaceRepo"
+          "when": "config.git.enabled && gitOpenRepositoryCount != 0 && huggingface.hasHuggingFaceRepo"
         }
       ]
     },
