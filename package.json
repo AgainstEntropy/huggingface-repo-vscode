@@ -1,7 +1,7 @@
 {
   "name": "huggingface-repo",
   "displayName": "HuggingFaceRepo",
-  "description": "",
+  "description": "Open HuggingFace repo with a single click",
   "version": "0.0.1",
   "publisher": "AgainstEntropy",
   "author": {
@@ -9,11 +9,16 @@
     "email": "yihao.w@nyu.edu"
   },
   "license": "MIT",
-  "homepage": "https://github.com/DonJayamanne/gitHistoryVSCode/blob/main/README.md",
+  "homepage": "https://github.com/AgainstEntropy/huggingface-repo-vscode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AgainstEntropy/huggingface-repo-vscode"
+  },
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
+    "SCM Providers",
     "Other"
   ],
   "activationEvents": [
